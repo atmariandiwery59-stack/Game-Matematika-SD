@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Petualangan Matematika Ceria SD/MI - Game Edukasi Interaktif</title>
+  <meta name="description" content="Game edukasi materi matematika interaktif untuk siswa SD dan Madrasah Ibtidaiyah (MI). Belajar berhitung, pecahan pizza, uang rupiah, bangun datar, dan jam analog dengan seru!">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+  
+  <!-- Google Fonts: Nunito & Comic Neue -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+  <!-- Floating background decorations -->
+  <div class="bg-decorations">
+    <div class="decor-bubble decor-bubble-1"></div>
+    <div class="decor-bubble decor-bubble-2"></div>
+    <div class="decor-bubble decor-bubble-3"></div>
+  </div>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <div id="app">
+    <!-- Navigation Bar -->
+    <header class="navbar">
+      <div class="nav-brand" onclick="App.showScreen('home-screen')">
+        <span class="brand-icon">🌟</span>
+        <div>
+          <h1 class="brand-title">Matematika Ceria</h1>
+          <p class="brand-subtitle">SD / Madrasah Ibtidaiyah (MI)</p>
+        </div>
+      </div>
+
+      <div class="nav-controls">
+        <button class="user-badge" onclick="App.changeStudentName()" title="Ganti Nama Siswa">
+          <span>👤 <span id="user-profile-name">Siswa Juara</span></span>
+          <span>| ⭐ <span id="user-total-stars">0</span></span>
+        </button>
+
+        <button class="icon-btn" id="sound-toggle-btn" onclick="App.toggleSound()" title="Efek Suara">🔊</button>
+        <button class="icon-btn" id="bgm-toggle-btn" onclick="App.toggleBgm()" title="Musik Latar">🎵</button>
+        <button class="icon-btn" onclick="App.openModal('trophy-modal')" title="Ruang Trofi & Lencana">🏆</button>
+        <button class="icon-btn" onclick="App.showScreen('study-screen')" title="Buku Rangkuman Materi">📖</button>
+        <button class="icon-btn" onclick="App.toggleFullscreen()" title="Layar Penuh">⛶</button>
+      </div>
+    </header>
+
+    <!-- Main Screens Container -->
+    <main>
+      <!-- 1. Home Screen -->
+      <section id="home-screen" class="screen active">
+        <!-- Hero Banner -->
+        <div class="hero-card">
+          <div class="hero-content">
+            <span class="hero-tag">✨ Kurikulum Merdeka & K13 SD/MI</span>
+            <h2 class="hero-title">Ayo Bertualang di Negeri Angka!</h2>
+            <p class="hero-desc">Bermain game sambil belajar penjumlahan, perkalian, pecahan pizza, belanja warung, geometri, dan jam analog dengan ceria!</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn btn-warning" onclick="HitungCepatGame.start(App.selectedFase === 'all' ? 'fase-a' : App.selectedFase)">
+                🚀 Main Sekarang
+              </button>
+              <button class="btn btn-secondary" onclick="App.showScreen('study-screen')">
+                📚 Buka Materi Belajar
+              </button>
+            </div>
+          </div>
+          <div class="hero-mascot">🦁</div>
+        </div>
+
+        <!-- Grade Filter Tabs -->
+        <div class="grade-selector">
+          <button class="grade-pill active" data-fase="all" onclick="App.filterGames('all')">
+            <span class="grade-pill-fase">Semua Tingkat</span>
+            <span class="grade-pill-name">Semua Game</span>
+          </button>
+          <button class="grade-pill" data-fase="fase-a" onclick="App.filterGames('fase-a')">
+            <span class="grade-pill-fase">Fase A</span>
+            <span class="grade-pill-name">Kelas 1 - 2 SD</span>
+          </button>
+          <button class="grade-pill" data-fase="fase-b" onclick="App.filterGames('fase-b')">
+            <span class="grade-pill-fase">Fase B</span>
+            <span class="grade-pill-name">Kelas 3 - 4 SD</span>
+          </button>
+          <button class="grade-pill" data-fase="fase-c" onclick="App.filterGames('fase-c')">
+            <span class="grade-pill-fase">Fase C</span>
+            <span class="grade-pill-name">Kelas 5 - 6 SD</span>
+          </button>
+        </div>
+
+        <!-- Grid Permainan Edukatif -->
+        <div class="games-grid">
+          <!-- Game 1: Hitung Kilat -->
+          <div class="game-card" data-fase="fase-a fase-b fase-c" onclick="HitungCepatGame.start(App.selectedFase === 'all' ? 'fase-a' : App.selectedFase)">
+            <div class="game-card-header">
+              <div class="game-card-icon" style="background:#dbeafe; color:#2563eb;">⚡</div>
+              <div class="game-card-info">
+                <h3>Hitung Kilat Angka</h3>
+                <span class="badge-fase" style="background:#eff6ff; color:#1d4ed8;">Semua Kelas (Fase A-C)</span>
+              </div>
+            </div>
+            <p class="game-card-desc">Tantangan penjumlahan, pengurangan, perkalian, pembagian, serta FPB & KPK dengan kombo beruntun!</p>
+            <div class="game-card-footer">
+              <div class="stars-score" id="stars-hitung-cepat">☆☆☆</div>
+              <span class="play-action-btn">Mulai Main ▶</span>
+            </div>
+          </div>
+
+          <!-- Game 2: Pecahan Pizza -->
+          <div class="game-card" data-fase="fase-b fase-c" onclick="PecahanPizzaGame.start()">
+            <div class="game-card-header">
+              <div class="game-card-icon" style="background:#fef3c7; color:#d97706;">🍕</div>
+              <div class="game-card-info">
+                <h3>Master Pecahan Pizza</h3>
+                <span class="badge-fase" style="background:#fffbeb; color:#b45309;">Fase B & C (Kelas 3-6)</span>
+              </div>
+            </div>
+            <p class="game-card-desc">Sajikan potongan pizza lezat sesuai pecahan pesanan hewan-hewan lucu! Belajar pembilang dan penyebut.</p>
+            <div class="game-card-footer">
+              <div class="stars-score" id="stars-pecahan-pizza">☆☆☆</div>
+              <span class="play-action-btn" style="background:#d97706;">Mulai Main ▶</span>
+            </div>
+          </div>
+
+          <!-- Game 3: Warung Pintar Nusantara -->
+          <div class="game-card" data-fase="fase-a fase-b" onclick="WarungRupiahGame.start()">
+            <div class="game-card-header">
+              <div class="game-card-icon" style="background:#dcfce7; color:#16a34a;">🏪</div>
+              <div class="game-card-info">
+                <h3>Warung Pintar Rupiah</h3>
+                <span class="badge-fase" style="background:#f0fdf4; color:#15803d;">Fase A & B (Kelas 1-4)</span>
+              </div>
+            </div>
+            <p class="game-card-desc">Simulasi belanja jajan dan bayar dengan pecahan uang kertas Rupiah asli. Belajar nilai uang & kembalian!</p>
+            <div class="game-card-footer">
+              <div class="stars-score" id="stars-warung-rupiah">☆☆☆</div>
+              <span class="play-action-btn" style="background:#16a34a;">Mulai Main ▶</span>
+            </div>
+          </div>
+
+          <!-- Game 4: Detektif Bangun Datar -->
+          <div class="game-card" data-fase="fase-a fase-b fase-c" onclick="BangunDatarGame.start()">
+            <div class="game-card-header">
+              <div class="game-card-icon" style="background:#f3e8ff; color:#9333ea;">📐</div>
+              <div class="game-card-info">
+                <h3>Detektif Bangun Datar</h3>
+                <span class="badge-fase" style="background:#faf5ff; color:#7e22ce;">Semua Kelas (Fase A-C)</span>
+              </div>
+            </div>
+            <p class="game-card-desc">Kenali persegi, segitiga, lingkaran, hitung jumlah sisi, sudut, serta keliling & luas bangun datar.</p>
+            <div class="game-card-footer">
+              <div class="stars-score" id="stars-bangun-datar">☆☆☆</div>
+              <span class="play-action-btn" style="background:#9333ea;">Mulai Main ▶</span>
+            </div>
+          </div>
+
+          <!-- Game 5: Petualang Waktu & Jam -->
+          <div class="game-card" data-fase="fase-a fase-b" onclick="JamWaktuGame.start()">
+            <div class="game-card-header">
+              <div class="game-card-icon" style="background:#fee2e2; color:#dc2626;">⏰</div>
+              <div class="game-card-info">
+                <h3>Petualang Jam & Waktu</h3>
+                <span class="badge-fase" style="background:#fff1f2; color:#be123c;">Fase A & B (Kelas 1-4)</span>
+              </div>
+            </div>
+            <p class="game-card-desc">Membaca jarum jam analog, menghitung durasi waktu sholat, belajar, dan istirahat sekolah.</p>
+            <div class="game-card-footer">
+              <div class="stars-score" id="stars-jam-waktu">☆☆☆</div>
+              <span class="play-action-btn" style="background:#dc2626;">Mulai Main ▶</span>
+            </div>
+          </div>
+
+          <!-- Game 6: Duel Cerdas 2 Pemain -->
+          <div class="game-card" data-fase="all" onclick="VersusGame.start()">
+            <div class="game-card-header">
+              <div class="game-card-icon" style="background:#ffedd5; color:#ea580c;">⚔️</div>
+              <div class="game-card-info">
+                <h3>Duel Cerdas (2 Pemain)</h3>
+                <span class="badge-fase" style="background:#fff7ed; color:#c2410c;">Multiplayer 1 Layar</span>
+              </div>
+            </div>
+            <p class="game-card-desc">Ajak teman atau orang tua bertanding cepat matematika di satu layar ponsel, tablet, atau laptop!</p>
+            <div class="game-card-footer">
+              <div class="stars-score" id="stars-versus">☆☆☆</div>
+              <span class="play-action-btn" style="background:#ea580c;">Mulai Duel ▶</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Active Game Screen (Host Dinamis) -->
+      <section id="game-screen" class="screen">
+        <!-- Konten game akan dimuat di sini secara dinamis -->
+      </section>
+
+      <!-- 3. Study Screen (Buku Rangkuman Materi) -->
+      <section id="study-screen" class="screen">
+        <div class="game-hud">
+          <div class="hud-item">
+            <button class="icon-btn" onclick="App.showScreen('home-screen')">🏠</button>
+            <span style="font-size:1.3rem; font-weight:900; color:#4338ca;">📖 Buku Materi Matematika SD/MI</span>
+          </div>
+          <div>
+            <button class="btn btn-primary" onclick="App.showScreen('home-screen')">Kembali ke Game</button>
+          </div>
+        </div>
+
+        <p style="color:#64748b; font-weight:700; margin-bottom:18px;">
+          Buka materi di bawah ini untuk mempelajari konsep, contoh soal cerita, dan trik berhitung cepat!
+        </p>
+
+        <div id="materials-list"></div>
+      </section>
+    </main>
+
+    <!-- Modals -->
+
+    <!-- Modal Trofi & Lencana -->
+    <div id="trophy-modal" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">🏆 Ruang Trofi & Lencana</div>
+          <button class="modal-close-btn" onclick="App.closeModal('trophy-modal')">✕</button>
+        </div>
+        <p style="color:#64748b; font-weight:700;">Kumpulkan bintang dan selesaikan tantangan untuk membuka semua lencana!</p>
+        
+        <div class="badges-grid" id="badges-container"></div>
+
+        <div style="margin-top:20px; text-align:center;">
+          <button class="btn btn-warning btn-lg" onclick="App.closeModal('trophy-modal'); App.openCertificateModal();">
+            📜 Lihat & Cetak Piagam Penghargaan
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Piagam Penghargaan Digital -->
+    <div id="cert-modal" class="modal-overlay">
+      <div class="modal-card" style="max-width: 680px;">
+        <div class="modal-header">
+          <div class="modal-title">📜 Piagam Penghargaan Resmi</div>
+          <button class="modal-close-btn" onclick="App.closeModal('cert-modal')">✕</button>
+        </div>
+
+        <div class="certificate-frame" id="printable-certificate">
+          <div class="cert-stamp">🏅</div>
+          <div class="cert-header">Piagam Penghargaan</div>
+          <div class="cert-subtitle">Diberikan Sebagai Bukti Prestasi Gemilang Kepada:</div>
+          <div class="cert-recipient" id="cert-name-display">Siswa Juara</div>
+          <div class="cert-body">
+            Atas keberhasilan menyelesaikan misi pembelajaran dalam <strong>Petualangan Matematika Ceria SD/MI</strong> dengan meraih total <strong id="cert-stars-count">0</strong> Bintang Emas. Teruslah berprestasi dan mencintai matematika!
+          </div>
+          <div class="cert-footer">
+            <div>
+              <span>Tanggal: </span><span id="cert-date">-</span>
+            </div>
+            <div>
+              <span>Tanda Tangan Guru / Pembimbing</span><br><br>
+              <strong>( .................................... )</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:12px;">
+          <button class="btn btn-primary" onclick="App.printCertificate()">🖨️ Cetak / Simpan PDF</button>
+          <button class="btn btn-secondary" onclick="App.closeModal('cert-modal')">Tutup</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Hasil Ronde / Game Over -->
+    <div id="result-modal" class="modal-overlay">
+      <div class="modal-card" style="text-align:center;">
+        <div id="result-stars" style="font-size:3.2rem; color:#f59e0b; margin-bottom:10px;" class="anim-twinkle">⭐⭐⭐</div>
+        <h2 id="result-title" style="font-size:1.8rem; font-weight:900; color:#1e293b; margin-bottom:8px;">Hebat Sekali!</h2>
+        <div style="font-size:1.4rem; font-weight:900; color:#d97706; margin-bottom:12px;">
+          Skor: <span id="result-score-val">0</span>
+        </div>
+        <p id="result-desc" style="color:#64748b; font-weight:700; margin-bottom:24px;">Kamu telah menyelesaikan permainan dengan sangat baik!</p>
+
+        <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+          <button class="btn btn-secondary btn-lg" onclick="App.closeModal('result-modal'); App.showScreen('home-screen');">
+            🏠 Menu Utama
+          </button>
+          <button class="btn btn-success btn-lg" id="result-replay-btn">
+            🔄 Main Lagi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>🎮 <strong>Petualangan Matematika Ceria SD/MI</strong> &bull; Dibuat khusus untuk Pembelajaran Interaktif Siswa Sekolah Dasar & Madrasah Ibtidaiyah.</p>
+      <p style="font-size:0.78rem; opacity:0.8; margin-top:4px;">Cocok untuk Layar Komputer, Proyektor Kelas, Smartboard, Tablet, dan Ponsel Pintar.</p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/data/material-data.js"></script>
+  <script src="js/data/quiz-data.js"></script>
+  <script src="js/games/hitung-cepat.js"></script>
+  <script src="js/games/pecahan-pizza.js"></script>
+  <script src="js/games/warung-rupiah.js"></script>
+  <script src="js/games/bangun-datar.js"></script>
+  <script src="js/games/jam-waktu.js"></script>
+  <script src="js/games/versus-mode.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
